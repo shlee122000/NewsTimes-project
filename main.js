@@ -18,6 +18,17 @@ const getLatestNews = async()=>{
     // console.log("dddd", newsList);
 };
 
+const getNewsByKeyword = async()=>{
+    const keyword = document.getElementById("search-input").value;
+    console.log("keyword", keyword);
+    const url = new URL('https://newsapi.org/v2/top-headlines?country=us&category=q={keyword}&apiKey=a233707d11d84e4cbe6ccc12fce0c251');
+    const response = await fetch(url);
+    const data = await response.json();
+    console.log("keyword data", data);
+    newsList = data.articles;
+    render();
+};
+
 const getNewsByCategory= async (event)=>{
     // console.log("ddddd", newsList)
     const category = event.target.textContent.toLowerCase();
