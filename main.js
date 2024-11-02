@@ -1,44 +1,40 @@
 // const API_KEY ='a233707d11d84e4cbe6ccc12fce0c251';
-let newsList
- = [];
+let newsList = [];
 const menus = document.querySelectorAll(".menus button");
 // console.log("mmm", menus);
-menus.forEach(menu=>menu.addEventListener("click",(event)=>getNewsByCategory(event)));
+menus.forEach((menu)=>menu.addEventListener("click",(event)=>getNewsByCategory(event))
+);
+
+let url = new URL('https://newsapi.org/v2/top-headlines?country=us&apiKey=a233707d11d84e4cbe6ccc12fce0c251')
+
+const getNews = async()=> {
+    const response = await fetch(url);
+    const data = await response.json();
+    newsList = data.articles;
+    render();
+
+}
 
 const getLatestNews = async()=>{
-    const url = new URL('https://newsapi.org/v2/top-headlines?country=us&apiKey=a233707d11d84e4cbe6ccc12fce0c251');
-    // const url = new URL('https://newsapi.org/v2/top-headlines?country=us&apiKey=${API_KEY}');
-    // console.log("uuu", url);
-    const response = await fetch(url);
-    // console.log("rrrr", response);
-    const data = await response.json();
-    newsList
-     = data.articles;
-    render();
-    // console.log("dddd", newsList);
+    url = new URL('https://newsapi.org/v2/top-headlines?country=us&apiKey=a233707d11d84e4cbe6ccc12fce0c251');
+ 
+    getNews();
 };
 
 const getNewsByKeyword = async()=>{
     const keyword = document.getElementById("search-input").value;
     console.log("keyword", keyword);
-    const url = new URL('https://newsapi.org/v2/top-headlines?country=us&category=q={keyword}&apiKey=a233707d11d84e4cbe6ccc12fce0c251');
-    const response = await fetch(url);
-    const data = await response.json();
-    console.log("keyword data", data);
-    newsList = data.articles;
-    render();
+    url = new URL('https://newsapi.org/v2/top-headlines?country=us&category=q={keyword}&apiKey=a233707d11d84e4cbe6ccc12fce0c251');
+     
+    getNews();
 };
-
 const getNewsByCategory= async (event)=>{
     // console.log("ddddd", newsList)
     const category = event.target.textContent.toLowerCase();
     console.log("category", category);
-    const url = new URL('https://newsapi.org/v2/top-headlines?country=us&category=${category}&apiKey=a233707d11d84e4cbe6ccc12fce0c251');
-    const response = await fetch(url);
-    const data = await response.json();
-    // console.log("kkk", data);
-    newsList = data.articles;
-    render();
+    url = new URL('https://newsapi.org/v2/top-headlines?country=us&category=${category}&apiKey=a233707d11d84e4cbe6ccc12fce0c251');
+    
+    getNews();
 };
 
 const render=()=> {
@@ -55,12 +51,11 @@ const render=()=> {
         <div>
             ${news.source.name} * ${news.publishedAt}
         </div>
-
     </div>
 </div>`
     ).join("");
     // console.log("html", newsHTML);                  
-         
+
     document.getElementById("news-board").innerHTML=newsHTML;
 };
 
