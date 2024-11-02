@@ -8,12 +8,26 @@ menus.forEach((menu)=>menu.addEventListener("click",(event)=>getNewsByCategory(e
 let url = new URL('https://newsapi.org/v2/top-headlines?country=us&apiKey=a233707d11d84e4cbe6ccc12fce0c251')
 
 const getNews = async()=> {
-    const response = await fetch(url);
-    const data = await response.json();
-    newsList = data.articles;
-    render();
+    try{
+        const response = await fetch(url);    
+        const data = await response.json();
+        if(response.status===200){
+            if(data.articles.length===0) {
+                throw new Error("No result for this search");
+            }
+            newsList = data.articles;
+            render();
+        }else{
+            throw new Error(data.message)
+        }
+        
 
-}
+    }catch(error){
+        // console.log("error", error.message);
+        errorRender(error.Message)
+    }
+
+};
 
 const getLatestNews = async()=>{
     url = new URL('https://newsapi.org/v2/top-headlines?country=us&apiKey=a233707d11d84e4cbe6ccc12fce0c251');
@@ -59,9 +73,34 @@ const render=()=> {
     document.getElementById("news-board").innerHTML=newsHTML;
 };
 
+const errorRender = (errorMessage)=> {
+    const errorHTML =`<div class="alert alert-danger" role="alert"> 
+    ${errorMessage}
+    </div>`;
+     
+    document.getElementById("news-board").innerHTML=errorHTML
+};
+
 getLatestNews();
 
 
 // 1. 버튼들에 클릭이벤트 주기
 // 2. 카네고리별 뉴스 가져오기
 // 3. 그 뉴스 보여주기
+
+
+
+
+// error 발생
+// let weight = 29
+// try{
+//     // 소스를 쓴다
+//     // 이안에 에러가 발생하면
+//     if(weight<30){
+//         throw new Error("당신은 너무 말랐어")
+//     }
+    
+// }catch(error){
+// // catch가 error를 잡아준다
+// console.log("내가 잡은 에러는",error.message)
+// }
